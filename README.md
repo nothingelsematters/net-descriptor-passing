@@ -1,7 +1,18 @@
+#### simple [echo](https://tools.ietf.org/html/rfc862) server based on ipc communication
+
+##### Usage:
+
+ * `client [unix socket address [message]]`
+   with the following standard values: `/tmp/socket standard_claim`
+ * `server [unix socket address]`
+   with `/tmp/socket` standard unix socket address
+
+***
+
 # Знакомство с передачей дескрипторов и IPC
 
 Необходимо получить опыт работы с IPC. Нужно создать приложение клиента и сервера.
- * Клиент и сервер обшаются через UNIX сокет
+ * Клиент и сервер общаются через UNIX сокет
  * Клиент подключается к серверу через UNIX сокет, получает от сервера файловый дескриптор, соответсвующий объекту какого-либо вида IPC
  * Клиент и сервер выполняют какое-то взаимодействие используя IPC
 
