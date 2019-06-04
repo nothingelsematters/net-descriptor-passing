@@ -7,6 +7,7 @@
 
 #include "client.hpp"
 #include "service-exception.hpp"
+#include "utils.hpp"
 
 namespace ipc_communication_service {
 
