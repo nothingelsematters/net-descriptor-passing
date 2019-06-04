@@ -19,7 +19,7 @@ bool check(int arg, const std::string& message) {
 
 void check_throw(int arg, const std::string& message) {
     if (!valid(arg)) {
-        throw new service_exception(message);
+        throw service_exception(message);
     }
 }
 
