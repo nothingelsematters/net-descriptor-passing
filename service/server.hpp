@@ -2,6 +2,7 @@
 #define ZYGOTE_SERVER_HPP
 
 #include <string>
+#include "socket.hpp"
 
 namespace ipc_communication_service {
 
@@ -17,9 +18,7 @@ public:
 
 private:
     const std::string pathname;
-    const int sockfd;
-
-    static constexpr int BACKLOG = 5; // max length to which the queue of pending connections may grow
+    usocket sc;
     static constexpr size_t BUFFER_SIZE = 1024; // reading buffer size
 };
 

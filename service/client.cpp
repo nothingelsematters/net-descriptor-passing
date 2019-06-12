@@ -6,49 +6,29 @@
 #include <sys/un.h>
 
 #include "client.hpp"
+#include "socket.hpp"
 #include "service-exception.hpp"
 #include "utils.hpp"
 
 namespace ipc_communication_service {
 
-client::client(const std::string& pathname) {
-    int sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
-    check_throw(sockfd, "create socket");
+client::client(const std::string& pathname) : fd(path_readfd(pathname)) {}
 
-    sockaddr_un addr;
-    const socklen_t addr_size = sizeof(sockaddr_un);
-    memset(&addr, 0, addr_size);
-
-    addr.sun_family = AF_UNIX;
-    std::strcpy(addr.sun_path, pathname.c_str());
-
-    check_throw(connect(sockfd, reinterpret_cast<sockaddr*>(&addr), addr_size), "connect");
-
-    char buffer[BUFFER_SIZE] = {};
-    if (!valid(read(sockfd, buffer, BUFFER_SIZE))) {
-        close(sockfd);
-        throw service_exception("read");
-    }
-    close(sockfd);
-
-    std::string strbuffer(buffer);
-    std::string::size_type boundary = strbuffer.find("\\");
-
-    infd = open(strbuffer.substr(0, boundary).c_str(), O_RDONLY);
-    outfd = open(strbuffer.substr(boundary + 1).c_str(), O_WRONLY);
+int client::path_readfd(const std::string& pathname) {
+    usocket sc;
+    sc.connect(pathname);
+    return readfd(sc.sockfd);
 }
 
 client::~client() {
-    yell("close");
-    close(infd);
-    close(outfd);
+    close(fd);
 }
 
 std::string client::yell(const std::string& str) {
-    write(outfd, str.c_str(), str.size());
+    send_message(fd, str);
     char buffer[BUFFER_SIZE] = {};
-    read(infd, buffer, BUFFER_SIZE);
-    return buffer;
+    read(fd, buffer, BUFFER_SIZE);
+    return std::string(buffer);
 }
 
 } /* ipc_communication_service */

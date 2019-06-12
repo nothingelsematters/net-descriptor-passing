@@ -13,8 +13,8 @@ public:
     std::string yell(const std::string& str);
 
 private:
-    int infd;
-    int outfd;
+    const int fd;
+    static int path_readfd(const std::string& pathname);
     static constexpr size_t BUFFER_SIZE = 1024;
 };
 

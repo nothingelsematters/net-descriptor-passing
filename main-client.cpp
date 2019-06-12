@@ -21,6 +21,7 @@ int main(int argc, char const* argv[]) {
         for (int i = 1; i < 4; ++i) {
             std::cout << cn.yell(claim + "_" + std::to_string(i)) << '\n';
         }
+        cn.yell("close");
     } catch (const service::service_exception& e) {
         std::cout << e.what() << '\n';
         return 1;
